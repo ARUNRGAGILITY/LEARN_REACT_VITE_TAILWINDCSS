@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Array of tag names and descriptions
+declare -a tags=(
+    "v1.0-vite-tailwind-setup:Step 1: Vite + Tailwind CSS setup"
+    "v2.0-jsx-basics:Step 2: JSX fundamentals and expressions"
+    "v3.0-components:Step 3: Functional components and composition"
+    "v4.0-props:Step 4: Props, PropTypes, and data passing"
+    "v5.0-state-basics:Step 5: useState hook and state management"
+    "v6.0-event-handling:Step 6: Event handling and user interactions"
+    "v7.0-lists-keys:Step 7: Rendering lists and keys"
+    "v8.0-conditional-rendering:Step 8: Conditional rendering patterns"
+    "v9.0-forms:Step 9: Forms and controlled components"
+    "v10.0-useeffect:Step 10: useEffect hook and side effects"
+    "v11.0-api-calls:Step 11: API calls and data fetching"
+    "v12.0-custom-hooks:Step 12: Custom hooks and reusable logic"
+)
+
+# Create tags for each step
+for tag_info in "${tags[@]}"; do
+    IFS=':' read -r tag_name tag_description <<< "$tag_info"
+    
+    # Make changes for this step
+    echo "Implementing $tag_description..."
+    
+    # Add and commit changes
+    git add .
+    git commit -m "$tag_description"
+    
+    # Create annotated tag
+    git tag -a "$tag_name" -m "$tag_description"
+    
+    echo "Created tag: $tag_name"
+done
+
+echo "All tags created! Push with: git push origin --tags"
