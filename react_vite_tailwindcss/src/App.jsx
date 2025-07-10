@@ -1,241 +1,337 @@
 import React from 'react'
 
-// Simple functional component
-function Header() {
+// Component with basic props
+function Greeting({ name, age, isStudent }) {
   return (
-    <header className="text-center mb-8">
-      <h1 className="text-4xl font-bold text-gray-800 mb-2">
-        Step 3: React Components
-      </h1>
-      <p className="text-lg text-gray-600">
-        Building reusable UI pieces
+    <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+      <h3 className="text-lg font-semibold text-blue-800 mb-2">
+        👋 Basic Props Example
+      </h3>
+      <p className="text-blue-700">
+        Hello, {name}! You are {age} years old
+        {isStudent ? ' and you are a student.' : ' and you are not a student.'}
       </p>
-    </header>
+    </div>
   )
 }
 
-// Component with internal logic
-function StepCounter() {
-  const currentStep = 3
-  const totalSteps = 12
-  const progress = (currentStep / totalSteps) * 100
-
+// Component with props destructuring
+function UserCard({ user: { name, email, role, avatar }, isOnline = false }) {
   return (
-    <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-      <h3 className="text-lg font-semibold text-blue-800 mb-3">
-        📊 Progress Tracker Component
-      </h3>
-      <div className="space-y-3">
-        <div className="flex justify-between text-blue-700">
-          <span>Current Step: {currentStep}</span>
-          <span>Total Steps: {totalSteps}</span>
+    <div className="bg-white p-6 rounded-lg shadow-md border">
+      <div className="flex items-center space-x-4">
+        <div className="relative">
+          <img 
+            src={avatar} 
+            alt={name}
+            className="w-16 h-16 rounded-full object-cover"
+          />
+          {isOnline && (
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></span>
+          )}
         </div>
-        <div className="w-full bg-blue-200 rounded-full h-2">
-          <div 
-            className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          ></div>
+        <div>
+          <h4 className="text-lg font-semibold text-gray-800">{name}</h4>
+          <p className="text-gray-600">{email}</p>
+          <span className="inline-block px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
+            {role}
+          </span>
         </div>
-        <p className="text-sm text-blue-600">{progress.toFixed(1)}% Complete</p>
       </div>
     </div>
   )
 }
 
-// Component that renders other components
-function ConceptCard({ title, emoji, concepts, bgColor = "gray" }) {
-  return (
-    <div className={`bg-${bgColor}-50 p-6 rounded-lg border-l-4 border-${bgColor}-500`}>
-      <h3 className={`text-lg font-semibold text-${bgColor}-800 mb-3`}>
-        {emoji} {title}
-      </h3>
-      <ul className={`space-y-2 text-${bgColor}-700`}>
-        {concepts.map((concept, index) => (
-          <li key={index}>• {concept}</li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-// Component with conditional rendering
-function StatusBadge({ isActive }) {
-  if (isActive) {
-    return (
-      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-        <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-        Active Learning
-      </span>
-    )
+// Component with default props
+function Badge({ text, variant = 'primary', size = 'medium' }) {
+  const variants = {
+    primary: 'bg-blue-500 text-white',
+    secondary: 'bg-gray-500 text-white',
+    success: 'bg-green-500 text-white',
+    warning: 'bg-yellow-500 text-black',
+    danger: 'bg-red-500 text-white'
   }
-  
+
+  const sizes = {
+    small: 'px-2 py-1 text-xs',
+    medium: 'px-3 py-1 text-sm',
+    large: 'px-4 py-2 text-base'
+  }
+
   return (
-    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
-      <span className="w-2 h-2 bg-gray-500 rounded-full mr-2"></span>
-      Paused
+    <span className={`inline-block rounded-full font-semibold ${variants[variant]} ${sizes[size]}`}>
+      {text}
     </span>
   )
 }
 
-// Component with event handling
-function InteractiveButton() {
-  const handleClick = () => {
-    alert('Component button clicked! 🎉')
+// Component with function props (callbacks)
+function Counter({ initialValue = 0, onCountChange }) {
+  const [count, setCount] = React.useState(initialValue)
+
+  const increment = () => {
+    const newCount = count + 1
+    setCount(newCount)
+    onCountChange && onCountChange(newCount)
+  }
+
+  const decrement = () => {
+    const newCount = count - 1
+    setCount(newCount)
+    onCountChange && onCountChange(newCount)
   }
 
   return (
-    <button 
-      onClick={handleClick}
-      className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 transform hover:scale-105"
-    >
-      Click Me! (Component Event)
-    </button>
-  )
-}
-
-// Component that demonstrates composition
-function LearningStats() {
-  const stats = [
-    { label: "Components Created", value: "5+", color: "blue" },
-    { label: "Concepts Learned", value: "8", color: "green" },
-    { label: "Code Reusability", value: "High", color: "purple" }
-  ]
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {stats.map((stat, index) => (
-        <div key={index} className={`bg-${stat.color}-50 p-4 rounded-lg text-center`}>
-          <div className={`text-2xl font-bold text-${stat.color}-600`}>
-            {stat.value}
-          </div>
-          <div className={`text-sm text-${stat.color}-800`}>
-            {stat.label}
-          </div>
-        </div>
-      ))}
+    <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+      <h4 className="text-lg font-semibold text-green-800 mb-3">
+        🔢 Counter with Callback Props
+      </h4>
+      <div className="flex items-center space-x-4">
+        <button 
+          onClick={decrement}
+          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+        >
+          -
+        </button>
+        <span className="text-2xl font-bold text-green-700">{count}</span>
+        <button 
+          onClick={increment}
+          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+        >
+          +
+        </button>
+      </div>
     </div>
   )
 }
 
-// Main App component that uses all other components
-function App() {
-  const componentConcepts = [
-    "Functional components",
-    "Component composition",
-    "Reusable UI pieces",
-    "Clean code organization"
-  ]
+// Component with children prop
+function Card({ title, children, className = '' }) {
+  return (
+    <div className={`bg-white rounded-lg shadow-md border ${className}`}>
+      {title && (
+        <div className="px-6 py-4 border-b">
+          <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+        </div>
+      )}
+      <div className="px-6 py-4">
+        {children}
+      </div>
+    </div>
+  )
+}
 
-  const jsxConcepts = [
-    "JSX expressions in components",
-    "Component nesting",
-    "Event handling in components",
-    "Conditional component rendering"
-  ]
+// Component with array props
+function SkillList({ skills, maxDisplay = 5 }) {
+  const displayedSkills = skills.slice(0, maxDisplay)
+  const remainingCount = skills.length - maxDisplay
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center p-4">
+    <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+      <h4 className="text-lg font-semibold text-purple-800 mb-3">
+        🎯 Skills (Array Props)
+      </h4>
+      <div className="flex flex-wrap gap-2">
+        {displayedSkills.map((skill, index) => (
+          <Badge key={index} text={skill} variant="primary" size="small" />
+        ))}
+        {remainingCount > 0 && (
+          <Badge text={`+${remainingCount} more`} variant="secondary" size="small" />
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Component with conditional props
+function StatusIndicator({ status, message, showIcon = true }) {
+  const statusConfig = {
+    success: { color: 'green', icon: '✅' },
+    warning: { color: 'yellow', icon: '⚠️' },
+    error: { color: 'red', icon: '❌' },
+    info: { color: 'blue', icon: 'ℹ️' }
+  }
+
+  const config = statusConfig[status] || statusConfig.info
+
+  return (
+    <div className={`bg-${config.color}-50 p-4 rounded-lg border-l-4 border-${config.color}-500`}>
+      <div className="flex items-center space-x-2">
+        {showIcon && <span className="text-lg">{config.icon}</span>}
+        <p className={`text-${config.color}-700 font-medium`}>{message}</p>
+      </div>
+    </div>
+  )
+}
+
+// Main App component demonstrating all prop patterns
+function App() {
+  const [counterValue, setCounterValue] = React.useState(0)
+
+  const sampleUser = {
+    name: "Alex Johnson",
+    email: "alex.johnson@example.com",
+    role: "React Developer",
+    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+  }
+
+  const skillsList = [
+    "React", "JavaScript", "TypeScript", "Tailwind CSS", 
+    "Node.js", "Express", "MongoDB", "Git", "AWS"
+  ]
+
+  const handleCounterChange = (newValue) => {
+    setCounterValue(newValue)
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-rose-500 to-orange-600 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-2xl p-8 max-w-6xl w-full">
         
-        {/* Using the Header component */}
-        <Header />
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">
+            Step 4: Props Deep Dive
+          </h1>
+          <p className="text-lg text-gray-600">
+            Mastering component communication
+          </p>
+        </div>
 
-        {/* Using the StepCounter component */}
+        {/* Basic Props */}
         <div className="mb-6">
-          <StepCounter />
+          <Greeting name="Sarah" age={25} isStudent={true} />
         </div>
 
-        {/* Status badge component */}
-        <div className="mb-6 flex items-center justify-center">
-          <StatusBadge isActive={true} />
-        </div>
-
-        {/* Grid of concept cards using ConceptCard component */}
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          <ConceptCard 
-            title="React Components"
-            emoji="🧩"
-            concepts={componentConcepts}
-            bgColor="green"
-          />
-          <ConceptCard 
-            title="Component Features"
-            emoji="⚡"
-            concepts={jsxConcepts}
-            bgColor="orange"
-          />
-        </div>
-
-        {/* Learning stats component */}
+        {/* Object Props with Destructuring */}
         <div className="mb-6">
-          <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
-            📈 Learning Statistics
+          <h3 className="text-lg font-semibold text-gray-800 mb-3">
+            👤 User Card (Object Props)
           </h3>
-          <LearningStats />
+          <UserCard user={sampleUser} isOnline={true} />
         </div>
 
-        {/* Interactive component */}
-        <div className="text-center mb-6">
+        {/* Default Props */}
+        <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-3">
-            🎯 Interactive Component
+            🏷️ Badges (Default Props)
           </h3>
-          <InteractiveButton />
-        </div>
-
-        {/* Component hierarchy visualization */}
-        <div className="bg-gray-50 p-6 rounded-lg mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-3">
-            🌳 Component Hierarchy
-          </h3>
-          <div className="font-mono text-sm text-gray-600 space-y-1">
-            <div>App (Main Component)</div>
-            <div className="ml-4">├── Header</div>
-            <div className="ml-4">├── StepCounter</div>
-            <div className="ml-4">├── StatusBadge</div>
-            <div className="ml-4">├── ConceptCard (×2)</div>
-            <div className="ml-4">├── LearningStats</div>
-            <div className="ml-4">└── InteractiveButton</div>
+          <div className="flex flex-wrap gap-2">
+            <Badge text="Primary" />
+            <Badge text="Success" variant="success" />
+            <Badge text="Warning" variant="warning" />
+            <Badge text="Large Badge" size="large" />
+            <Badge text="Small" variant="danger" size="small" />
           </div>
         </div>
 
-        {/* Key concepts learned */}
-        <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-          <h3 className="text-lg font-semibold text-yellow-800 mb-3">
-            🎓 Component Concepts Mastered:
+        {/* Function Props */}
+        <div className="mb-6">
+          <Counter initialValue={5} onCountChange={handleCounterChange} />
+          <div className="mt-2 p-3 bg-gray-100 rounded">
+            <p className="text-sm text-gray-600">
+              Counter value received by parent: <strong>{counterValue}</strong>
+            </p>
+          </div>
+        </div>
+
+        {/* Children Props */}
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-3">
+            📦 Card with Children Props
           </h3>
           <div className="grid md:grid-cols-2 gap-4">
-            <ul className="space-y-2 text-yellow-700">
-              <li>• Creating functional components</li>
-              <li>• Component composition and nesting</li>
-              <li>• Passing data between components</li>
-              <li>• Component reusability</li>
+            <Card title="With Title">
+              <p className="text-gray-600">
+                This content is passed as children to the Card component.
+              </p>
+            </Card>
+            <Card className="border-blue-200">
+              <p className="text-gray-600">
+                This card has no title but includes custom className.
+              </p>
+              <button className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+                Button inside card
+              </button>
+            </Card>
+          </div>
+        </div>
+
+        {/* Array Props */}
+        <div className="mb-6">
+          <SkillList skills={skillsList} maxDisplay={6} />
+        </div>
+
+        {/* Conditional Props */}
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-3">
+            🚦 Status Indicators (Conditional Props)
+          </h3>
+          <div className="space-y-3">
+            <StatusIndicator 
+              status="success" 
+              message="Props are working perfectly!" 
+            />
+            <StatusIndicator 
+              status="warning" 
+              message="Remember to validate your props" 
+              showIcon={false}
+            />
+            <StatusIndicator 
+              status="info" 
+              message="Props enable component reusability" 
+            />
+          </div>
+        </div>
+
+        {/* Prop Drilling Example */}
+        <div className="mb-6">
+          <Card title="🔄 Prop Drilling Demonstration">
+            <p className="text-gray-600 mb-3">
+              Data flows down from parent to child components through props.
+            </p>
+            <div className="bg-gray-50 p-4 rounded font-mono text-sm">
+              <div className="text-blue-600">App (data: "Hello Props!")</div>
+              <div className="ml-4 text-green-600">└── Card (title: "Prop Drilling")</div>
+              <div className="ml-8 text-purple-600">└── StatusIndicator (message: data)</div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Key Concepts */}
+        <div className="bg-indigo-50 p-6 rounded-lg border-l-4 border-indigo-500 mb-6">
+          <h3 className="text-lg font-semibold text-indigo-800 mb-3">
+            🎓 Props Concepts Mastered:
+          </h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <ul className="space-y-2 text-indigo-700">
+              <li>• Basic prop passing</li>
+              <li>• Props destructuring</li>
+              <li>• Default props</li>
+              <li>• Function props (callbacks)</li>
             </ul>
-            <ul className="space-y-2 text-yellow-700">
-              <li>• Event handling in components</li>
-              <li>• Conditional rendering</li>
-              <li>• Component organization</li>
-              <li>• Building component hierarchies</li>
+            <ul className="space-y-2 text-indigo-700">
+              <li>• Children prop</li>
+              <li>• Array and object props</li>
+              <li>• Conditional props</li>
+              <li>• Prop drilling concept</li>
             </ul>
           </div>
         </div>
 
         {/* Navigation */}
-        <div className="mt-8 text-center">
+        <div className="text-center">
           <div className="flex justify-center space-x-2 mb-4">
+            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
             <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
             <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
           </div>
-          <p className="text-sm text-gray-500 mb-2">Progress: Step 3 of 12</p>
-          <div className="space-y-2">
-            <div>
-              <code className="bg-gray-200 px-3 py-1 rounded text-sm mr-2">
-                git checkout v4.0-props
-              </code>
-              <span className="text-gray-600">→ Learn about Props</span>
-            </div>
-          </div>
+          <p className="text-sm text-gray-500 mb-2">Progress: Step 4 of 12</p>
+          <code className="bg-gray-200 px-3 py-1 rounded text-sm">
+            git checkout v5.0-state-basics
+          </code>
         </div>
       </div>
     </div>
