@@ -1,0 +1,151 @@
+npm create vite@latest my-app -- --template react
+cd my-app
+npm install -D tailwindcss@3.4.1 postcss@8.4.38 autoprefixer@10.4.19
+npx tailwindcss init -p
+
+src/index.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* optional custom styles */
+src/main.jsx
+import './index.css';
+
+npm install react-router-dom
+npm install axios react-icons
+npm install react-router-dom axios react-icons daisyui
+npm install
+
+
+
+
+npm install
+npm install -D tailwindcss@3.4.1 postcss@8.4.38 autoprefixer@10.4.19
+npx tailwindcss init -p
+npm install react-hot-toast react-hook-form lucide-react react-dnd react-dnd-html5-backend react-router-dom axios react-icons daisyui
+
+src/index.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+src/tailwind.config.css
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: '#eff6ff',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+        }
+      }
+    },
+  },
+  plugins: [],
+}
+
+
+src/index.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+@layer base {
+  body {
+    @apply transition-colors duration-300;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+}
+
+// src/App.jsx
+import React from 'react';
+
+function App() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center">
+          Tailwind CSS Test
+        </h1>
+        
+        <div className="space-y-4">
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+            ✅ If you can see this styled card, Tailwind is working!
+          </div>
+          
+          <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-200">
+            Test Button
+          </button>
+          
+          <div className="flex space-x-2">
+            <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+            <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
+            <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+          </div>
+          
+          <p className="text-sm text-gray-600 text-center">
+            This component uses various Tailwind utilities for layout, colors, spacing, and responsive design.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
+
+// vite.config.js
+
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 3000,
+    host: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          ui: ['lucide-react', 'react-hot-toast'],
+        },
+      },
+    },
+  },
+  css: {
+    postcss: './postcss.config.js',
+  },
+})
