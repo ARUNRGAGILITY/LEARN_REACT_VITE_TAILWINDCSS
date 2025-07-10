@@ -28,7 +28,9 @@ for tag_info in "${tags[@]}"; do
     git commit -m "$tag_description"
     
     # Create annotated tag
-    git tag -a "$tag_name" -m "$tag_description"
+    #git tag -a "$tag_name" -m "$tag_description"
+
+    git tag -d "$tag_name" 
     
     echo "Created tag: $tag_name"
 done
